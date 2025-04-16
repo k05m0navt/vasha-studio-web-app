@@ -57,12 +57,32 @@ function ContactForm() {
   const [email, setEmail] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [success, setSuccess] = React.useState(false);
+  const [errors, setErrors] = React.useState<{ name?: string; email?: string; message?: string }>({});
+  const [submitting, setSubmitting] = React.useState(false);
+
+  const validate = () => {
+    const newErrors: { name?: string; email?: string; message?: string } = {};
+    if (!name.trim()) newErrors.name = "Введите имя";
+    if (!email.trim()) newErrors.email = "Введите email";
+    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) newErrors.email = "Введите корректный email";
+    if (!message.trim()) newErrors.message = "Введите сообщение";
+    return newErrors;
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Add your backend logic here
-    setSuccess(true);
-    setTimeout(() => setSuccess(false), 3000);
+    const validationErrors = validate();
+    setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) return;
+    setSubmitting(true);
+    setTimeout(() => {
+      setSuccess(true);
+      setName("");
+      setEmail("");
+      setMessage("");
+      setSubmitting(false);
+      setTimeout(() => setSuccess(false), 3000);
+    }, 1000);
   };
 
   return (
@@ -72,24 +92,30 @@ function ContactForm() {
         value={name}
         onChange={(event) => setName(event.target.value)}
         placeholder="Имя"
-        className="w-full mb-4"
+        className="w-full mb-2"
+        aria-label="Имя"
       />
+      {errors.name && <p className="text-red-500 text-sm mb-2">{errors.name}</p>}
       <Input
         type="email"
         value={email}
         onChange={(event) => setEmail(event.target.value)}
         placeholder="Email"
-        className="w-full mb-4"
+        className="w-full mb-2"
+        aria-label="Email"
       />
+      {errors.email && <p className="text-red-500 text-sm mb-2">{errors.email}</p>}
       <Input
         type="text"
         value={message}
         onChange={(event) => setMessage(event.target.value)}
         placeholder="Сообщение"
-        className="w-full mb-4"
+        className="w-full mb-2"
+        aria-label="Сообщение"
       />
-      <Button type="submit" className="w-full">
-        Отправить
+      {errors.message && <p className="text-red-500 text-sm mb-2">{errors.message}</p>}
+      <Button type="submit" className="w-full mt-2" disabled={submitting}>
+        {submitting ? "Отправка..." : "Отправить"}
       </Button>
       {success && (
         <p className="text-green-500 mt-4">Сообщение отправлено!</p>
