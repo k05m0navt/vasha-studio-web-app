@@ -298,7 +298,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="py-8 text-center text-muted-foreground text-sm border-t border-muted flex flex-col items-center gap-2">
-        <div> 2024 Vasha Studio · Все права защищены</div>
+        <div> 2025 Vasha Studio · Все права защищены</div>
         <div className="flex gap-4 justify-center mt-2">
           {socials.map((s) => (
             <a
@@ -327,9 +327,3 @@ export default function Home() {
   );
 }
 
-/* Tailwind CSS custom animation classes (add to your global CSS or tailwind.config.js):
-.animate-fade-in { animation: fadeIn 1s ease-out forwards; }
-.animate-fade-in-down { animation: fadeInDown 1s ease-out forwards; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes fadeInDown { from { opacity: 0; transform: translateY(-40px); } to { opacity: 1; transform: none; } }
-*/
