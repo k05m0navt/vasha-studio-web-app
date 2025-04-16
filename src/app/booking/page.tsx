@@ -15,10 +15,16 @@ export default function BookingPage() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [bookedTimeslots, setBookedTimeslots] = useState<string[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoadingPage(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     async function fetchBooked() {
@@ -70,51 +76,62 @@ export default function BookingPage() {
   }
 
   return (
-    <div className="max-w-md mx-auto py-12">
-      <h1 className="text-2xl font-bold mb-4">Бронирование фотостудии</h1>
-      <Card className="p-6 flex flex-col gap-4">
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-          <BookingCalendar selectedDate={selectedDate} onDateChange={date => {
-            setSelectedDate(date);
-            setSelectedTimeslot(null);
-          }} />
-          <TimeslotPicker
-            date={selectedDate}
-            selectedTimeslot={selectedTimeslot}
-            onTimeslotChange={setSelectedTimeslot}
-            bookedTimeslots={bookedTimeslots}
-            loading={loadingSlots}
-          />
-          <div className="flex flex-col gap-2">
-            <label htmlFor="name">Имя</label>
-            <Input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-              required
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <label htmlFor="phone">Телефон</label>
-            <Input
-              id="phone"
-              type="tel"
-              value={phone}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}
-              required
-            />
-          </div>
-          {error && <div className="text-red-600 text-sm">{error}</div>}
-          <Button
-            type="submit"
-            className="font-semibold mt-2"
-            disabled={loading || !selectedDate || !selectedTimeslot || !name || !phone}
-          >
-            {loading ? <Skeleton className="h-6 w-24 mx-auto" /> : "Забронировать"}
-          </Button>
-        </form>
-      </Card>
-    </div>
+    <main className="min-h-screen bg-background py-12 px-4">
+      <h1 className="text-3xl font-bold mb-8 text-center">Бронирование фотосессии</h1>
+      {loadingPage ? (
+        <div className="max-w-xl mx-auto">
+          <Skeleton className="w-full h-14 mb-4 rounded-lg" />
+          <Skeleton className="w-full h-32 mb-4 rounded-lg" />
+          <Skeleton className="w-full h-10 rounded-lg" />
+        </div>
+      ) : (
+        <div className="max-w-md mx-auto py-12">
+          <h1 className="text-2xl font-bold mb-4">Бронирование фотостудии</h1>
+          <Card className="p-6 flex flex-col gap-4">
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+              <BookingCalendar selectedDate={selectedDate} onDateChange={date => {
+                setSelectedDate(date);
+                setSelectedTimeslot(null);
+              }} />
+              <TimeslotPicker
+                date={selectedDate}
+                selectedTimeslot={selectedTimeslot}
+                onTimeslotChange={setSelectedTimeslot}
+                bookedTimeslots={bookedTimeslots}
+                loading={loadingSlots}
+              />
+              <div className="flex flex-col gap-2">
+                <label htmlFor="name">Имя</label>
+                <Input
+                  id="name"
+                  type="text"
+                  value={name}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="phone">Телефон</label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  value={phone}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}
+                  required
+                />
+              </div>
+              {error && <div className="text-red-600 text-sm">{error}</div>}
+              <Button
+                type="submit"
+                className="font-semibold mt-2"
+                disabled={loading || !selectedDate || !selectedTimeslot || !name || !phone}
+              >
+                {loading ? <Skeleton className="h-6 w-24 mx-auto" /> : "Забронировать"}
+              </Button>
+            </form>
+          </Card>
+        </div>
+      )}
+    </main>
   );
 }

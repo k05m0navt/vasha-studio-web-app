@@ -2,6 +2,7 @@
 import * as React from "react";
 import Image from "next/image";
 import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const galleryImages = [
   { src: "/gallery1.jpg", alt: "Съемка в студии 1", category: "Творческие" },
@@ -17,6 +18,12 @@ const categories = ["Все", "Портреты", "Семейные", "Детс�
 export default function GalleryPage() {
   const [selected, setSelected] = React.useState<number | null>(null);
   const [filter, setFilter] = React.useState("Все");
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, [filter]);
 
   const filteredImages = filter === "Все"
     ? galleryImages
@@ -39,37 +46,40 @@ export default function GalleryPage() {
         ))}
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
-        {filteredImages.map((img, idx) => {
-          // Adjust index for modal selection
-          const realIdx = galleryImages.findIndex(g => g.src === img.src);
-          return (
-            <Dialog key={img.src} open={selected === realIdx} onOpenChange={(open: boolean) => setSelected(open ? realIdx : null)}>
-              <DialogTrigger asChild>
-                <button className="focus:outline-none group">
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    width={600}
-                    height={400}
-                    className="rounded-lg object-cover w-full h-48 group-hover:scale-105 transition-transform"
-                    priority={realIdx < 3}
-                  />
-                </button>
-              </DialogTrigger>
-              <DialogContent className="flex flex-col items-center bg-background p-0 max-w-2xl">
-                <DialogTitle className="sr-only">{img.alt}</DialogTitle>
-                <Image
-                  src={img.src}
-                  alt={img.alt}
-                  width={900}
-                  height={600}
-                  className="rounded-lg object-contain w-full h-auto"
-                />
-                <div className="p-4 text-center text-base">{img.alt}</div>
-              </DialogContent>
-            </Dialog>
-          );
-        })}
+        {loading
+          ? Array.from({ length: 6 }).map((_, i) => (
+              <Skeleton key={i} className="w-full h-48 rounded-lg" />
+            ))
+          : filteredImages.map((img, idx) => {
+              const realIdx = galleryImages.findIndex(g => g.src === img.src);
+              return (
+                <Dialog key={img.src} open={selected === realIdx} onOpenChange={(open: boolean) => setSelected(open ? realIdx : null)}>
+                  <DialogTrigger asChild>
+                    <button className="focus:outline-none group">
+                      <Image
+                        src={img.src}
+                        alt={img.alt}
+                        width={600}
+                        height={400}
+                        className="rounded-lg object-cover w-full h-48 group-hover:scale-105 transition-transform"
+                        priority={realIdx < 3}
+                      />
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="flex flex-col items-center bg-background p-0 max-w-2xl">
+                    <DialogTitle className="sr-only">{img.alt}</DialogTitle>
+                    <Image
+                      src={img.src}
+                      alt={img.alt}
+                      width={900}
+                      height={600}
+                      className="rounded-lg object-contain w-full h-auto"
+                    />
+                    <div className="p-4 text-center text-base">{img.alt}</div>
+                  </DialogContent>
+                </Dialog>
+              );
+            })}
       </div>
     </main>
   );

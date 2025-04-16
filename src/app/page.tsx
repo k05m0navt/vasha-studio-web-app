@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import * as React from "react";
 
 const testimonials = [
@@ -126,6 +127,11 @@ function ContactForm() {
 
 export default function Home() {
   const [openFaq, setOpenFaq] = React.useState<number | null>(null);
+  const [loading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <div className="flex flex-col min-h-screen font-sans bg-background text-foreground">
       {/* Hero Section */}
@@ -144,33 +150,39 @@ export default function Home() {
       <section className="py-12 px-4 bg-muted opacity-0 animate-fade-in">
         <h2 className="text-2xl font-bold text-center mb-8">Наши работы</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
-          <Link href="/gallery">
-            <Image
-              src="/gallery1.jpg"
-              alt="Пример работы 1"
-              width={400}
-              height={300}
-              className="rounded-lg object-cover w-full h-40 hover:scale-105 transition-transform"
-            />
-          </Link>
-          <Link href="/gallery">
-            <Image
-              src="/gallery2.jpg"
-              alt="Пример работы 2"
-              width={400}
-              height={300}
-              className="rounded-lg object-cover w-full h-40 hover:scale-105 transition-transform"
-            />
-          </Link>
-          <Link href="/gallery">
-            <Image
-              src="/gallery3.jpg"
-              alt="Пример работы 3"
-              width={400}
-              height={300}
-              className="rounded-lg object-cover w-full h-40 hover:scale-105 transition-transform"
-            />
-          </Link>
+          {loading
+            ? Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={i} className="w-full h-40 rounded-lg" />
+              ))
+            : [
+                <Link href="/gallery" key="gallery-link-1">
+                  <Image
+                    src="/gallery1.jpg"
+                    alt="Съемка в студии 1"
+                    width={400}
+                    height={300}
+                    className="rounded-lg object-cover w-full h-40 hover:scale-105 transition-transform"
+                  />
+                </Link>,
+                <Link href="/gallery" key="gallery-link-2">
+                  <Image
+                    src="/gallery2.jpg"
+                    alt="Портретная фотосессия"
+                    width={400}
+                    height={300}
+                    className="rounded-lg object-cover w-full h-40 hover:scale-105 transition-transform"
+                  />
+                </Link>,
+                <Link href="/gallery" key="gallery-link-3">
+                  <Image
+                    src="/gallery3.jpg"
+                    alt="Семейная фотосессия"
+                    width={400}
+                    height={300}
+                    className="rounded-lg object-cover w-full h-40 hover:scale-105 transition-transform"
+                  />
+                </Link>,
+              ]}
         </div>
       </section>
 
@@ -326,4 +338,3 @@ export default function Home() {
     </div>
   );
 }
-
