@@ -47,8 +47,8 @@ export default function GalleryPage() {
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
         {loading
-          ? Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="w-full h-48 rounded-lg" />
+          ? Array.from({ length: filteredImages.length || 6 }).map((_, i) => (
+              <Skeleton key={i} className="w-full h-48 sm:h-48 rounded-lg object-cover" style={{ aspectRatio: '600/400' }} />
             ))
           : filteredImages.map((img, idx) => {
               const realIdx = galleryImages.findIndex(g => g.src === img.src);
@@ -61,7 +61,7 @@ export default function GalleryPage() {
                         alt={img.alt}
                         width={600}
                         height={400}
-                        className="rounded-lg object-cover w-full h-48 group-hover:scale-105 transition-transform"
+                        className="rounded-lg object-cover w-full h-48 sm:h-48 group-hover:scale-105 transition-transform"
                         priority={realIdx < 3}
                       />
                     </button>

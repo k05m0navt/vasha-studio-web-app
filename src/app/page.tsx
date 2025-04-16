@@ -151,8 +151,8 @@ export default function Home() {
         <h2 className="text-2xl font-bold text-center mb-8">Наши работы</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
           {loading
-            ? Array.from({ length: 3 }).map((_, i) => (
-                <Skeleton key={i} className="w-full h-40 rounded-lg" />
+            ? [0, 1, 2].map(i => (
+                <Skeleton key={i} className="w-full h-40 sm:h-40 rounded-lg object-cover" style={{ aspectRatio: '400/300' }} />
               ))
             : [
                 <Link href="/gallery" key="gallery-link-1">
@@ -161,7 +161,7 @@ export default function Home() {
                     alt="Съемка в студии 1"
                     width={400}
                     height={300}
-                    className="rounded-lg object-cover w-full h-40 hover:scale-105 transition-transform"
+                    className="rounded-lg object-cover w-full h-40 sm:h-40 hover:scale-105 transition-transform"
                   />
                 </Link>,
                 <Link href="/gallery" key="gallery-link-2">
@@ -170,7 +170,7 @@ export default function Home() {
                     alt="Портретная фотосессия"
                     width={400}
                     height={300}
-                    className="rounded-lg object-cover w-full h-40 hover:scale-105 transition-transform"
+                    className="rounded-lg object-cover w-full h-40 sm:h-40 hover:scale-105 transition-transform"
                   />
                 </Link>,
                 <Link href="/gallery" key="gallery-link-3">
@@ -179,7 +179,7 @@ export default function Home() {
                     alt="Семейная фотосессия"
                     width={400}
                     height={300}
-                    className="rounded-lg object-cover w-full h-40 hover:scale-105 transition-transform"
+                    className="rounded-lg object-cover w-full h-40 sm:h-40 hover:scale-105 transition-transform"
                   />
                 </Link>,
               ]}
@@ -223,19 +223,10 @@ export default function Home() {
         <h2 className="text-2xl font-bold text-center mb-8">Отзывы клиентов</h2>
         <div className="flex flex-col sm:flex-row gap-8 justify-center items-stretch max-w-4xl mx-auto">
           {testimonials.map(({ name, text, avatar }, i) => (
-            <div
-              key={i}
-              className="bg-background rounded-xl shadow p-6 flex flex-col items-center flex-1"
-            >
-              <Image
-                src={avatar}
-                alt={name}
-                width={64}
-                height={64}
-                className="rounded-full mb-4"
-              />
-              <p className="italic mb-2">“{text}”</p>
-              <span className="font-semibold text-primary">{name}</span>
+            <div key={i} className="flex flex-col items-center bg-background rounded-lg shadow p-6 flex-1">
+              <Image src={avatar} alt={name} width={64} height={64} className="rounded-full mb-4" />
+              <div className="italic mb-2">“{text}”</div>
+              <div className="font-semibold">{name}</div>
             </div>
           ))}
         </div>
