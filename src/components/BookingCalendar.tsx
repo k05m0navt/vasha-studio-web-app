@@ -7,7 +7,15 @@ interface BookingCalendarProps {
 }
 
 export const BookingCalendar: React.FC<BookingCalendarProps> = ({ selectedDate, onDateChange }) => {
-  // For simplicity, use native date input. Replace with a UI calendar if needed.
+  // Use a string state for the input value to avoid hydration mismatch
+  const [inputValue, setInputValue] = React.useState("");
+
+  React.useEffect(() => {
+    if (selectedDate) {
+      setInputValue(selectedDate.toISOString().slice(0, 10));
+    }
+  }, [selectedDate]);
+
   return (
     <div className="flex flex-col gap-2">
       <label htmlFor="booking-date" className="font-medium">Выберите дату</label>
@@ -15,10 +23,10 @@ export const BookingCalendar: React.FC<BookingCalendarProps> = ({ selectedDate, 
         id="booking-date"
         type="date"
         className="border rounded px-2 py-1"
-        value={selectedDate ? selectedDate.toISOString().slice(0, 10) : ""}
+        value={inputValue}
         onChange={e => {
-          const value = e.target.value;
-          if (value) onDateChange(new Date(value));
+          setInputValue(e.target.value);
+          if (e.target.value) onDateChange(new Date(e.target.value));
         }}
       />
     </div>
