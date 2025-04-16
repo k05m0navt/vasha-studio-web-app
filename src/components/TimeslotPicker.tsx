@@ -6,6 +6,7 @@ interface TimeslotPickerProps {
   selectedTimeslot: string | null;
   onTimeslotChange: (timeslot: string) => void;
   availableTimeslots?: string[];
+  bookedTimeslots?: string[];
 }
 
 // Default timeslots for demonstration
@@ -25,22 +26,30 @@ export const TimeslotPicker: React.FC<TimeslotPickerProps> = ({
   selectedTimeslot,
   onTimeslotChange,
   availableTimeslots = DEFAULT_TIMESLOTS,
+  bookedTimeslots = [],
 }) => {
   if (!date) return null;
   return (
     <div className="flex flex-col gap-2 mt-4">
       <label className="font-medium">Выберите время</label>
       <div className="grid grid-cols-2 gap-2">
-        {availableTimeslots.map((slot) => (
-          <button
-            key={slot}
-            type="button"
-            className={`px-3 py-2 rounded border transition-all ${selectedTimeslot === slot ? "bg-primary text-black border-primary" : "bg-white border-gray-300"}`}
-            onClick={() => onTimeslotChange(slot)}
-          >
-            {slot}
-          </button>
-        ))}
+        {availableTimeslots.map((slot) => {
+          const isBooked = bookedTimeslots.includes(slot);
+          return (
+            <button
+              key={slot}
+              type="button"
+              className={`px-3 py-2 rounded border transition-all
+                ${selectedTimeslot === slot ? "bg-primary text-black border-primary" : "bg-white border-gray-300"}
+                ${isBooked ? "opacity-50 cursor-not-allowed line-through" : ""}
+              `}
+              onClick={() => !isBooked && onTimeslotChange(slot)}
+              disabled={isBooked}
+            >
+              {slot}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

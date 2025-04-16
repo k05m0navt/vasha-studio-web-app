@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BookingCalendar from "@/components/BookingCalendar";
 import TimeslotPicker from "@/components/TimeslotPicker";
-import { createBooking } from "./actions";
+import { createBooking, getBookedTimeslots } from "./actions";
 
 export default function BookingPage() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -13,6 +13,23 @@ export default function BookingPage() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [bookedTimeslots, setBookedTimeslots] = useState<string[]>([]);
+
+  useEffect(() => {
+    async function fetchBooked() {
+      if (selectedDate) {
+        try {
+          const slots = await getBookedTimeslots(selectedDate.toISOString());
+          setBookedTimeslots(slots || []);
+        } catch {
+          setBookedTimeslots([]);
+        }
+      } else {
+        setBookedTimeslots([]);
+      }
+    }
+    fetchBooked();
+  }, [selectedDate]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -56,6 +73,7 @@ export default function BookingPage() {
           date={selectedDate}
           selectedTimeslot={selectedTimeslot}
           onTimeslotChange={setSelectedTimeslot}
+          bookedTimeslots={bookedTimeslots}
         />
         <div className="flex flex-col gap-2">
           <label htmlFor="name">Имя</label>
