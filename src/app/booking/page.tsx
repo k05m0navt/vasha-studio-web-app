@@ -1,6 +1,9 @@
+"use client";
+
 import React, { useState } from "react";
 import BookingCalendar from "@/components/BookingCalendar";
 import TimeslotPicker from "@/components/TimeslotPicker";
+import { createBooking } from "./actions";
 
 export default function BookingPage() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -11,17 +14,20 @@ export default function BookingPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Placeholder for server action
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
-      // TODO: Replace with server action or API call
-      await new Promise((res) => setTimeout(res, 1000));
+      await createBooking({
+        name,
+        phone,
+        date: selectedDate!.toISOString(),
+        timeslot: selectedTimeslot!,
+      });
       setSubmitted(true);
     } catch (err: any) {
-      setError("Ошибка при бронировании. Попробуйте еще раз.");
+      setError(err.message || "Ошибка при бронировании. Попробуйте еще раз.");
     } finally {
       setLoading(false);
     }
