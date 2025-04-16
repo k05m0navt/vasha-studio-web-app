@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import * as React from "react";
 
 const testimonials = [
@@ -50,6 +51,52 @@ const faqs = [
       "Да, конечно! Просто предупредите нас заранее, чтобы мы подготовили всё необходимое.",
   },
 ];
+
+function ContactForm() {
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [message, setMessage] = React.useState("");
+  const [success, setSuccess] = React.useState(false);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // Add your backend logic here
+    setSuccess(true);
+    setTimeout(() => setSuccess(false), 3000);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-8 bg-background rounded-lg shadow">
+      <Input
+        type="text"
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+        placeholder="Имя"
+        className="w-full mb-4"
+      />
+      <Input
+        type="email"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        placeholder="Email"
+        className="w-full mb-4"
+      />
+      <Input
+        type="text"
+        value={message}
+        onChange={(event) => setMessage(event.target.value)}
+        placeholder="Сообщение"
+        className="w-full mb-4"
+      />
+      <Button type="submit" className="w-full">
+        Отправить
+      </Button>
+      {success && (
+        <p className="text-green-500 mt-4">Сообщение отправлено!</p>
+      )}
+    </form>
+  );
+}
 
 export default function Home() {
   const [openFaq, setOpenFaq] = React.useState<number | null>(null);
@@ -215,6 +262,12 @@ export default function Home() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Contact Form Section */}
+      <section className="py-12 px-4">
+        <h2 className="text-2xl font-bold text-center mb-8">Связаться с нами</h2>
+        <ContactForm />
       </section>
 
       {/* Footer */}
