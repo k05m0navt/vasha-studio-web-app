@@ -9,11 +9,19 @@ interface BookingInput {
 }
 
 export async function createBooking({ name, phone, date, timeslot }: BookingInput) {
-  // Basic validation
   if (!name || !phone || !date || !timeslot) {
     throw new Error("Все поля обязательны для заполнения.");
   }
-  // Save booking to DB
+  // Prevent double-booking
+  const exists = await prisma.booking.findFirst({
+    where: {
+      date: new Date(date),
+      timeslot,
+    },
+  });
+  if (exists) {
+    throw new Error("Этот временной слот уже занят. Пожалуйста, выберите другое время.");
+  }
   const booking = await prisma.booking.create({
     data: {
       name,
@@ -23,4 +31,14 @@ export async function createBooking({ name, phone, date, timeslot }: BookingInpu
     },
   });
   return booking;
+}
+
+// Server action to fetch booked timeslots for a given date
+export async function getBookedTimeslots(date: string): Promise<string[]> {
+  if (!date) return [];
+  const bookings = await prisma.booking.findMany({
+    where: { date: new Date(date) },
+    select: { timeslot: true },
+  });
+  return bookings.map(b => b.timeslot);
 }
