@@ -1,5 +1,8 @@
 "use client";
+
 import * as React from "react";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface TimeslotPickerProps {
   date: Date | null;
@@ -7,6 +10,7 @@ interface TimeslotPickerProps {
   onTimeslotChange: (timeslot: string) => void;
   availableTimeslots?: string[];
   bookedTimeslots?: string[];
+  loading?: boolean;
 }
 
 // Default timeslots for demonstration
@@ -27,29 +31,32 @@ export const TimeslotPicker: React.FC<TimeslotPickerProps> = ({
   onTimeslotChange,
   availableTimeslots = DEFAULT_TIMESLOTS,
   bookedTimeslots = [],
+  loading = false,
 }) => {
   if (!date) return null;
   return (
     <div className="flex flex-col gap-2 mt-4">
       <label className="font-medium">Выберите время</label>
       <div className="grid grid-cols-2 gap-2">
-        {availableTimeslots.map((slot) => {
-          const isBooked = bookedTimeslots.includes(slot);
-          return (
-            <button
-              key={slot}
-              type="button"
-              className={`px-3 py-2 rounded border transition-all
-                ${selectedTimeslot === slot ? "bg-primary text-black border-primary" : "bg-white border-gray-300"}
-                ${isBooked ? "opacity-50 cursor-not-allowed line-through" : ""}
-              `}
-              onClick={() => !isBooked && onTimeslotChange(slot)}
-              disabled={isBooked}
-            >
-              {slot}
-            </button>
-          );
-        })}
+        {loading
+          ? Array.from({ length: availableTimeslots.length }).map((_, i) => (
+              <Skeleton key={i} className="h-10 w-full rounded" />
+            ))
+          : availableTimeslots.map((slot) => {
+              const isBooked = bookedTimeslots.includes(slot);
+              return (
+                <Button
+                  key={slot}
+                  type="button"
+                  variant={selectedTimeslot === slot ? "default" : "outline"}
+                  className={`justify-center ${isBooked ? "opacity-50 cursor-not-allowed line-through" : ""}`}
+                  onClick={() => !isBooked && onTimeslotChange(slot)}
+                  disabled={isBooked}
+                >
+                  {slot}
+                </Button>
+              );
+            })}
       </div>
     </div>
   );
