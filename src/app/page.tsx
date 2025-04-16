@@ -129,7 +129,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen font-sans bg-background text-foreground">
       {/* Hero Section */}
-      <section className="flex-1 flex flex-col items-center justify-center py-20 px-4 text-center bg-gradient-to-b from-primary/10 to-transparent">
+      <section className="flex-1 flex flex-col items-center justify-center py-20 px-4 text-center bg-gradient-to-b from-primary/10 to-transparent opacity-0 animate-fade-in-down">
         <h1 className="text-4xl sm:text-5xl font-bold mb-4">Vasha Studio</h1>
         <p className="text-lg sm:text-xl mb-8 max-w-xl mx-auto">
           Современная фотостудия в центре города. Забронируйте удобное время
@@ -141,7 +141,7 @@ export default function Home() {
       </section>
 
       {/* Gallery Preview */}
-      <section className="py-12 px-4 bg-muted">
+      <section className="py-12 px-4 bg-muted opacity-0 animate-fade-in">
         <h2 className="text-2xl font-bold text-center mb-8">Наши работы</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
           <Link href="/gallery">
@@ -175,7 +175,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-12 px-4 max-w-4xl mx-auto">
+      <section className="py-12 px-4 max-w-4xl mx-auto opacity-0 animate-fade-in">
         <h2 className="text-2xl font-bold text-center mb-8">
           Почему выбирают нас?
         </h2>
@@ -207,7 +207,7 @@ export default function Home() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-12 px-4 bg-muted/50">
+      <section className="py-12 px-4 bg-muted/50 opacity-0 animate-fade-in">
         <h2 className="text-2xl font-bold text-center mb-8">Отзывы клиентов</h2>
         <div className="flex flex-col sm:flex-row gap-8 justify-center items-stretch max-w-4xl mx-auto">
           {testimonials.map(({ name, text, avatar }, i) => (
@@ -230,7 +230,7 @@ export default function Home() {
       </section>
 
       {/* How It Works */}
-      <section className="py-12 px-4">
+      <section className="py-12 px-4 opacity-0 animate-fade-in">
         <h2 className="text-2xl font-bold text-center mb-8">
           Как это работает?
         </h2>
@@ -259,7 +259,7 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-12 px-4 bg-muted/50">
+      <section className="py-12 px-4 bg-muted/50 opacity-0 animate-fade-in">
         <h2 className="text-2xl font-bold text-center mb-8">
           Часто задаваемые вопросы
         </h2>
@@ -291,7 +291,7 @@ export default function Home() {
       </section>
 
       {/* Contact Form Section */}
-      <section className="py-12 px-4">
+      <section className="py-12 px-4 opacity-0 animate-fade-in">
         <h2 className="text-2xl font-bold text-center mb-8">Связаться с нами</h2>
         <ContactForm />
       </section>
@@ -326,3 +326,10 @@ export default function Home() {
     </div>
   );
 }
+
+/* Tailwind CSS custom animation classes (add to your global CSS or tailwind.config.js):
+.animate-fade-in { animation: fadeIn 1s ease-out forwards; }
+.animate-fade-in-down { animation: fadeInDown 1s ease-out forwards; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeInDown { from { opacity: 0; transform: translateY(-40px); } to { opacity: 1; transform: none; } }
+*/
