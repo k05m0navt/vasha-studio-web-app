@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import * as React from "react";
 
 const testimonials = [
   {
@@ -30,7 +33,26 @@ const socials = [
   { href: "https://vk.com/yourstudio", icon: "/vk.svg", label: "VK" },
 ];
 
+const faqs = [
+  {
+    question: "Как отменить или перенести бронь?",
+    answer:
+      "Свяжитесь с нами по телефону или в мессенджере не позднее чем за 24 часа до бронирования, и мы поможем вам перенести или отменить запись.",
+  },
+  {
+    question: "Что взять с собой на фотосессию?",
+    answer:
+      "Возьмите сменную обувь, любимые аксессуары и хорошее настроение! Если нужны дополнительные реквизиты — уточните у администратора.",
+  },
+  {
+    question: "Можно ли прийти с детьми или животными?",
+    answer:
+      "Да, конечно! Просто предупредите нас заранее, чтобы мы подготовили всё необходимое.",
+  },
+];
+
 export default function Home() {
+  const [openFaq, setOpenFaq] = React.useState<number | null>(null);
   return (
     <div className="flex flex-col min-h-screen font-sans bg-background text-foreground">
       {/* Hero Section */}
@@ -160,6 +182,38 @@ export default function Home() {
             </div>
             <span>Заполните данные</span>
           </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-12 px-4 bg-muted/50">
+        <h2 className="text-2xl font-bold text-center mb-8">
+          Часто задаваемые вопросы
+        </h2>
+        <div className="max-w-2xl mx-auto divide-y divide-muted-foreground/20 rounded-lg bg-background shadow">
+          {faqs.map((faq, idx) => (
+            <div key={idx}>
+              <button
+                className="w-full text-left px-6 py-4 flex justify-between items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary text-base font-medium"
+                aria-expanded={openFaq === idx}
+                onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+              >
+                <span>{faq.question}</span>
+                <span
+                  className={`ml-2 transition-transform ${
+                    openFaq === idx ? "rotate-90" : "rotate-0"
+                  }`}
+                >
+                  ▶
+                </span>
+              </button>
+              {openFaq === idx && (
+                <div className="px-6 pb-4 text-muted-foreground animate-fade-in">
+                  {faq.answer}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </section>
 
