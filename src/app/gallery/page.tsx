@@ -5,12 +5,9 @@ import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/
 import { Skeleton } from "@/components/ui/skeleton";
 
 const galleryImages = [
-  { src: "/gallery1.jpg", alt: "Съемка в студии 1", category: "Творческие" },
-  { src: "/gallery2.jpg", alt: "Портретная фотосессия", category: "Портреты" },
-  { src: "/gallery3.jpg", alt: "Семейная фотосессия", category: "Семейные" },
-  { src: "/gallery4.jpg", alt: "Детская фотосъемка", category: "Детские" },
-  { src: "/gallery5.jpg", alt: "Творческая съемка", category: "Творческие" },
-  { src: "/gallery6.jpg", alt: "Парная фотосессия", category: "Семейные" },
+  { src: "/gallery1.jpeg", alt: "Съемка в студии 1", category: "Детские" },
+  { src: "/gallery2.jpeg", alt: "Портретная фотосессия", category: "Портреты" },
+  { src: "/gallery3.jpeg", alt: "Семейная фотосессия", category: "Семейные" },
 ];
 
 const categories = ["Все", "Портреты", "Семейные", "Детские", "Творческие"];
