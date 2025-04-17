@@ -69,10 +69,26 @@ export default function BookingPage() {
   const allTimeslotsBooked =
     !loadingSlots && bookedTimeslots.length >= 12; // assuming 12 slots per day, adjust as needed
 
+  // Phone validation helper
+  function isValidPhone(phone: string) {
+    // Accepts +7XXXXXXXXXX or 8XXXXXXXXXX, 11 digits
+    const digits = phone.replace(/\D/g, '');
+    if (digits.length !== 11) return false;
+    // Accept both +7 and 8 as starting digits
+    if (phone.trim().startsWith('+7') && digits.startsWith('7')) return true;
+    if (phone.trim().startsWith('8') && digits.startsWith('8')) return true;
+    return false;
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    if (!isValidPhone(phone)) {
+      setLoading(false);
+      setError("Введите корректный номер телефона (11 цифр, например, +7XXXXXXXXXX или 8XXXXXXXXXX)");
+      return;
+    }
     try {
       await createBooking({
         name,
@@ -145,13 +161,19 @@ export default function BookingPage() {
                 id="phone"
                 type="tel"
                 value={phone}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setPhone(e.target.value)
-                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}
                 required
+                pattern="^(\+7|8)[0-9]{10}$"
+                inputMode="tel"
+                autoComplete="tel"
+                aria-invalid={!!error && error.includes("телефон")}
+                aria-describedby="phone-error"
               />
+              {error && error.includes("телефон") && (
+                <span id="phone-error" className="text-red-600 text-xs" aria-live="polite">{error}</span>
+              )}
             </div>
-            {error && <div className="text-red-600 text-sm">{error}</div>}
+            {error && !error.includes("телефон") && <div className="text-red-600 text-sm">{error}</div>}
             <Button
               type="submit"
               className="font-semibold mt-2"
