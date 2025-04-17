@@ -10,11 +10,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { createBooking, getBookedTimeslots } from "./actions";
 
 export default function BookingPage() {
-  // Set default date to today
+  // Set default date to today in Moscow timezone (UTC+3)
   const today = useMemo(() => {
     const now = new Date();
-    now.setHours(0, 0, 0, 0);
-    return now;
+    // Get current UTC time in ms
+    const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+    // Moscow is UTC+3
+    const moscow = new Date(utc + 3 * 60 * 60000);
+    moscow.setHours(0, 0, 0, 0);
+    return moscow;
   }, []);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(today);
@@ -51,6 +55,19 @@ export default function BookingPage() {
     }
     fetchBooked();
   }, [selectedDate]);
+
+  useEffect(() => {
+    if (
+      selectedTimeslot &&
+      bookedTimeslots.includes(selectedTimeslot)
+    ) {
+      setSelectedTimeslot(null);
+      setError("Выбранный временной слот уже занят. Пожалуйста, выберите другое время.");
+    }
+  }, [bookedTimeslots, selectedTimeslot]);
+
+  const allTimeslotsBooked =
+    !loadingSlots && bookedTimeslots.length >= 12; // assuming 12 slots per day, adjust as needed
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -107,6 +124,9 @@ export default function BookingPage() {
               bookedTimeslots={bookedTimeslots}
               loading={loadingSlots}
             />
+            {allTimeslotsBooked && (
+              <div className="text-red-600 text-sm">Все слоты на выбранную дату заняты.</div>
+            )}
             <div className="flex flex-col gap-2">
               <label htmlFor="name">Имя</label>
               <Input
@@ -136,7 +156,12 @@ export default function BookingPage() {
               type="submit"
               className="font-semibold mt-2"
               disabled={
-                loading || !selectedDate || !selectedTimeslot || !name || !phone
+                loading ||
+                !selectedDate ||
+                !selectedTimeslot ||
+                !name ||
+                !phone ||
+                allTimeslotsBooked
               }
             >
               {loading ? (

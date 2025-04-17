@@ -157,16 +157,16 @@ export default function Home() {
             : [
                 <Link href="/gallery" key="gallery-link-1">
                   <Image
-                    src="/gallery1.jpg"
+                    src="/gallery1.jpeg"
                     alt="Съемка в студии 1"
-                    width={400}
-                    height={300}
+                    width={800}
+                    height={600}
                     className="rounded-lg object-cover w-full h-40 sm:h-40 hover:scale-105 transition-transform"
                   />
                 </Link>,
                 <Link href="/gallery" key="gallery-link-2">
                   <Image
-                    src="/gallery2.jpg"
+                    src="/gallery2.jpeg"
                     alt="Портретная фотосессия"
                     width={400}
                     height={300}
@@ -175,7 +175,7 @@ export default function Home() {
                 </Link>,
                 <Link href="/gallery" key="gallery-link-3">
                   <Image
-                    src="/gallery3.jpg"
+                    src="/gallery3.jpeg"
                     alt="Семейная фотосессия"
                     width={400}
                     height={300}
