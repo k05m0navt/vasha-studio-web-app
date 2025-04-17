@@ -58,14 +58,19 @@ function ContactForm() {
   const [email, setEmail] = React.useState("");
   const [message, setMessage] = React.useState("");
   const [success, setSuccess] = React.useState(false);
-  const [errors, setErrors] = React.useState<{ name?: string; email?: string; message?: string }>({});
+  const [errors, setErrors] = React.useState<{
+    name?: string;
+    email?: string;
+    message?: string;
+  }>({});
   const [submitting, setSubmitting] = React.useState(false);
 
   const validate = () => {
     const newErrors: { name?: string; email?: string; message?: string } = {};
     if (!name.trim()) newErrors.name = "Введите имя";
     if (!email.trim()) newErrors.email = "Введите email";
-    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) newErrors.email = "Введите корректный email";
+    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
+      newErrors.email = "Введите корректный email";
     if (!message.trim()) newErrors.message = "Введите сообщение";
     return newErrors;
   };
@@ -87,7 +92,10 @@ function ContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-8 bg-background rounded-lg shadow">
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-lg mx-auto p-8 bg-background rounded-lg shadow"
+    >
       <Input
         type="text"
         value={name}
@@ -96,7 +104,9 @@ function ContactForm() {
         className="w-full mb-2"
         aria-label="Имя"
       />
-      {errors.name && <p className="text-red-500 text-sm mb-2">{errors.name}</p>}
+      {errors.name && (
+        <p className="text-red-500 text-sm mb-2">{errors.name}</p>
+      )}
       <Input
         type="email"
         value={email}
@@ -105,7 +115,9 @@ function ContactForm() {
         className="w-full mb-2"
         aria-label="Email"
       />
-      {errors.email && <p className="text-red-500 text-sm mb-2">{errors.email}</p>}
+      {errors.email && (
+        <p className="text-red-500 text-sm mb-2">{errors.email}</p>
+      )}
       <Input
         type="text"
         value={message}
@@ -114,13 +126,13 @@ function ContactForm() {
         className="w-full mb-2"
         aria-label="Сообщение"
       />
-      {errors.message && <p className="text-red-500 text-sm mb-2">{errors.message}</p>}
+      {errors.message && (
+        <p className="text-red-500 text-sm mb-2">{errors.message}</p>
+      )}
       <Button type="submit" className="w-full mt-2" disabled={submitting}>
         {submitting ? "Отправка..." : "Отправить"}
       </Button>
-      {success && (
-        <p className="text-green-500 mt-4">Сообщение отправлено!</p>
-      )}
+      {success && <p className="text-green-500 mt-4">Сообщение отправлено!</p>}
     </form>
   );
 }
@@ -151,8 +163,12 @@ export default function Home() {
         <h2 className="text-2xl font-bold text-center mb-8">Наши работы</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {loading
-            ? [0, 1, 2].map(i => (
-                <Skeleton key={i} className="w-full h-[300px] rounded-xl object-cover" style={{ aspectRatio: '4/3' }} />
+            ? [0, 1, 2].map((i) => (
+                <Skeleton
+                  key={i}
+                  className="w-full h-[300px] rounded-xl object-cover"
+                  style={{ aspectRatio: "4/3" }}
+                />
               ))
             : [
                 <Link href="/gallery" key="gallery-link-1">
@@ -223,8 +239,17 @@ export default function Home() {
         <h2 className="text-2xl font-bold text-center mb-8">Отзывы клиентов</h2>
         <div className="flex flex-col sm:flex-row gap-8 justify-center items-stretch max-w-4xl mx-auto">
           {testimonials.map(({ name, text, avatar }, i) => (
-            <div key={i} className="flex flex-col items-center bg-background rounded-lg shadow p-6 flex-1">
-              <Image src={avatar} alt={name} width={64} height={64} className="rounded-full mb-4" />
+            <div
+              key={i}
+              className="flex flex-col items-center bg-background rounded-lg shadow p-6 flex-1"
+            >
+              <Image
+                src={avatar}
+                alt={name}
+                width={64}
+                height={64}
+                className="rounded-full mb-4"
+              />
               <div className="italic mb-2">“{text}”</div>
               <div className="font-semibold">{name}</div>
             </div>
@@ -295,37 +320,11 @@ export default function Home() {
 
       {/* Contact Form Section */}
       <section className="py-12 px-4 opacity-0 animate-fade-in">
-        <h2 className="text-2xl font-bold text-center mb-8">Связаться с нами</h2>
+        <h2 className="text-2xl font-bold text-center mb-8">
+          Связаться с нами
+        </h2>
         <ContactForm />
       </section>
-
-      {/* Footer */}
-      <footer className="py-8 text-center text-muted-foreground text-sm border-t border-muted flex flex-col items-center gap-2">
-        <div> 2025 Vasha Studio · Все права защищены</div>
-        <div className="flex gap-4 justify-center mt-2">
-          {socials.map((s) => (
-            <a
-              key={s.href}
-              href={s.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={s.label}
-              className="hover:opacity-80"
-            >
-              <Image src={s.icon} alt={s.label} width={28} height={28} />
-            </a>
-          ))}
-        </div>
-        <div className="mt-2">
-          <a href="tel:+79999999999" className="hover:underline">
-            +7 (999) 999-99-99
-          </a>{" "}
-          ·
-          <a href="mailto:info@vasha.studio" className="hover:underline ml-2">
-            info@vasha.studio
-          </a>
-        </div>
-      </footer>
     </div>
   );
 }

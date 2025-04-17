@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
+import { FaCamera } from "react-icons/fa";
 
 const navLinks = [
   { href: "/", label: "Главная" },
@@ -15,9 +15,9 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   return (
     <nav className="w-full bg-background/80 backdrop-blur border-b border-muted sticky top-0 z-50 shadow-sm">
-      <div className="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
+      <div className="max-w-6xl mx-auto flex items-center justify-between w-full px-4 sm:px-6 py-3">
         <Link href="/" className="flex items-center gap-2 text-xl font-bold tracking-tight text-primary">
-          <Image src="/logo.svg" alt="Vasha Studio Logo" width={32} height={32} className="rounded" priority />
+          <FaCamera size={28} className="text-primary" />
           <span className="hidden sm:inline">Vasha Studio</span>
         </Link>
         <div className="flex sm:hidden items-center gap-2">
