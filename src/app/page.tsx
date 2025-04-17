@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import * as React from "react";
+import { FaUserCircle, FaRegSmile, FaRegGrinStars } from "react-icons/fa";
 
 const testimonials = [
   {
@@ -51,6 +52,12 @@ const faqs = [
     answer:
       "Да, конечно! Просто предупредите нас заранее, чтобы мы подготовили всё необходимое.",
   },
+];
+
+const testimonialIcons = [
+  <FaUserCircle className="text-primary" size={48} key="user" />,
+  <FaRegSmile className="text-primary" size={48} key="smile" />,
+  <FaRegGrinStars className="text-primary" size={48} key="star" />,
 ];
 
 function ContactForm() {
@@ -238,19 +245,13 @@ export default function Home() {
       <section className="py-12 px-4 bg-muted/50 opacity-0 animate-fade-in">
         <h2 className="text-2xl font-bold text-center mb-8">Отзывы клиентов</h2>
         <div className="flex flex-col sm:flex-row gap-8 justify-center items-stretch max-w-4xl mx-auto">
-          {testimonials.map(({ name, text, avatar }, i) => (
+          {testimonials.map(({ name, text }, i) => (
             <div
               key={i}
               className="flex flex-col items-center bg-background rounded-lg shadow p-6 flex-1"
             >
-              <Image
-                src={avatar}
-                alt={name}
-                width={64}
-                height={64}
-                className="rounded-full mb-4"
-              />
-              <div className="italic mb-2">“{text}”</div>
+              {testimonialIcons[i % testimonialIcons.length]}
+              <div className="italic mb-2 mt-2">“{text}”</div>
               <div className="font-semibold">{name}</div>
             </div>
           ))}
