@@ -93,13 +93,12 @@ export default function GalleryPage() {
           </div>
         ) : (
           filteredImages.map((img, idx) => {
-            const realIdx = galleryImages.findIndex((g) => g.src === img.src);
             return (
               <Dialog
                 key={img.src}
-                open={selected === realIdx}
+                open={selected === idx}
                 onOpenChange={(open: boolean) =>
-                  setSelected(open ? realIdx : null)
+                  setSelected(open ? idx : null)
                 }
               >
                 <DialogTrigger asChild>
@@ -109,7 +108,7 @@ export default function GalleryPage() {
                     aria-label={`Открыть превью: ${img.alt}`}
                     onKeyDown={(e) => {
                       if (e.key === "Enter" || e.key === " ") {
-                        setSelected(realIdx);
+                        setSelected(idx);
                       }
                     }}
                   >
@@ -119,8 +118,8 @@ export default function GalleryPage() {
                       width={900}
                       height={600}
                       className="w-full h-[250px] sm:h-[300px] md:h-[350px] group-hover:scale-105 transition-transform duration-200 opacity-0 animate-fade-in"
-                      priority={realIdx < 3}
-                      loading={realIdx < 3 ? "eager" : "lazy"}
+                      priority={idx < 3}
+                      loading={idx < 3 ? "eager" : "lazy"}
                     />
                   </button>
                 </DialogTrigger>
@@ -140,8 +139,7 @@ export default function GalleryPage() {
                   <div className="flex gap-4 pb-4">
                     <button
                       ref={(el) => {
-                        // Focus next button when dialog opens
-                        if (selected === realIdx && el && typeof window !== "undefined") {
+                        if (selected === idx && el && typeof window !== "undefined") {
                           setTimeout(() => el.focus(), 0);
                         }
                       }}
@@ -158,8 +156,7 @@ export default function GalleryPage() {
                     </button>
                     <button
                       ref={(el) => {
-                        // Focus next button when navigating with right arrow
-                        if (selected === realIdx && el && typeof window !== "undefined") {
+                        if (selected === idx && el && typeof window !== "undefined") {
                           setTimeout(() => el.focus(), 0);
                         }
                       }}
