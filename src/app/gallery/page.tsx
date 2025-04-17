@@ -117,7 +117,7 @@ export default function GalleryPage() {
                       alt={img.alt}
                       width={900}
                       height={600}
-                      className="w-full h-[250px] sm:h-[300px] md:h-[350px] group-hover:scale-105 transition-transform duration-200 opacity-0 animate-fade-in"
+                      className="w-full aspect-[3/2] object-cover h-auto group-hover:scale-105 transition-transform duration-200 opacity-0 animate-fade-in rounded-xl"
                       priority={idx < 3}
                       loading={idx < 3 ? "eager" : "lazy"}
                     />
