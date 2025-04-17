@@ -14,19 +14,31 @@ export default function Navbar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   return (
-    <nav className="w-full bg-background/80 backdrop-blur border-b border-muted fixed top-0 left-0 z-50 shadow-sm">
+    <nav className="w-full bg-background/80 backdrop-blur border-b border-muted sticky top-0 z-50 shadow-sm">
       <div className="max-w-6xl mx-auto flex items-center justify-between px-4 py-3">
         <Link href="/" className="flex items-center gap-2 text-xl font-bold tracking-tight text-primary">
           <Image src="/logo.svg" alt="Vasha Studio Logo" width={32} height={32} className="rounded" priority />
           <span className="hidden sm:inline">Vasha Studio</span>
         </Link>
-        <button
-          className={`sm:hidden ml-2 p-2 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-primary ${open ? 'bg-primary/10' : ''}`}
-          aria-label="Открыть меню"
-          onClick={() => setOpen((v) => !v)}
-        >
-          <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className={`transition-transform duration-300 ${open ? 'rotate-90' : ''}`}><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </button>
+        <div className="flex sm:hidden items-center gap-2">
+          {open ? (
+            <button
+              className="p-2 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-primary bg-primary/10"
+              aria-label="Закрыть меню"
+              onClick={() => setOpen(false)}
+            >
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          ) : (
+            <button
+              className="p-2 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-primary"
+              aria-label="Открыть меню"
+              onClick={() => setOpen(true)}
+            >
+              <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="transition-transform duration-300"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+          )}
+        </div>
         <ul className="hidden sm:flex gap-6 items-center">
           {navLinks.map((link) => (
             <li key={link.href}>
