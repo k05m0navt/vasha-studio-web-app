@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import BookingCalendar from "@/components/BookingCalendar";
 import TimeslotPicker from "@/components/TimeslotPicker";
 import { Card } from "@/components/ui/card";
@@ -31,6 +31,11 @@ export default function BookingPage() {
   const [error, setError] = useState<string | null>(null);
   const [bookedTimeslots, setBookedTimeslots] = useState<string[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
+
+  // Ref for ARIA live region
+  const ariaLiveRef = useRef<HTMLDivElement>(null);
+  // Ref for date input to focus after reset
+  const dateInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoadingPage(false), 1000);
@@ -65,6 +70,12 @@ export default function BookingPage() {
       setError("Выбранный временной слот уже занят. Пожалуйста, выберите другое время.");
     }
   }, [bookedTimeslots, selectedTimeslot]);
+
+  useEffect(() => {
+    if (submitted && ariaLiveRef.current) {
+      ariaLiveRef.current.focus();
+    }
+  }, [submitted]);
 
   const allTimeslotsBooked =
     !loadingSlots && bookedTimeslots.length >= 12; // assuming 12 slots per day, adjust as needed
@@ -108,8 +119,26 @@ export default function BookingPage() {
     return (
       <div className="max-w-md mx-auto py-12">
         <Card className="p-6 text-center">
-          <h2 className="text-xl font-bold mb-2">Спасибо за бронирование!</h2>
-          <p>Мы свяжемся с вами для подтверждения.</p>
+          <div
+            ref={ariaLiveRef}
+            tabIndex={-1}
+            aria-live="polite"
+            aria-atomic="true"
+            className="outline-none"
+          >
+            <h2 className="text-xl font-bold mb-2">Спасибо за бронирование!</h2>
+            <p>Мы свяжемся с вами для подтверждения.</p>
+          </div>
+          <Button
+            className="mt-6"
+            onClick={() => {
+              setSubmitted(false);
+              setName("");
+              setPhone("");
+              setSelectedTimeslot(null);
+              setTimeout(() => dateInputRef.current?.focus(), 100);
+            }}
+          >Забронировать еще</Button>
         </Card>
       </div>
     );
@@ -126,6 +155,7 @@ export default function BookingPage() {
         <Card className="p-6 flex flex-col gap-4">
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
             <BookingCalendar
+              ref={dateInputRef}
               selectedDate={selectedDate}
               onDateChange={(date) => {
                 setSelectedDate(date);
@@ -174,6 +204,14 @@ export default function BookingPage() {
               )}
             </div>
             {error && !error.includes("телефон") && <div className="text-red-600 text-sm">{error}</div>}
+            {/* ARIA live region for errors */}
+            <div
+              aria-live="polite"
+              aria-atomic="true"
+              style={{ position: "absolute", left: "-9999px", height: 0, width: 0, overflow: "hidden" }}
+            >
+              {error}
+            </div>
             <Button
               type="submit"
               className="font-semibold mt-2"
